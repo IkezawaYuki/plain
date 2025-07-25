@@ -13,7 +13,7 @@ function App() {
     setLoading(true)
     setError('')
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_DOMAIN}:8080/api/hello`)
+      const response = await fetch("https://plain.sd-a-root.info/api/hello")
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
