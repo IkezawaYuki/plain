@@ -52,7 +52,7 @@ services:
     env_file:
       - .env
     environment:
-      - REACT_APP_API_URL=${REACT_APP_API_URL}
+      - VITE_API_DOMAIN=${VITE_API_DOMAIN}
     depends_on:
       - backend
     networks:
