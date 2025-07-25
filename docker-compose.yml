@@ -45,14 +45,12 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        - REACT_APP_API_URL=${REACT_APP_API_URL}
     container_name: plain_frontend
     restart: unless-stopped
     ports:
       - "3000:3000"
-    env_file:
-      - .env
-    environment:
-      - VITE_API_DOMAIN=${VITE_API_DOMAIN}
     depends_on:
       - backend
     networks:

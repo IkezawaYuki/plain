@@ -11,6 +11,9 @@ RUN npm ci
 # Copy source code
 COPY . .
 
+# Accept build-time environment variable
+ARG REACT_APP_API_URL
+
 # Build the application
 RUN npm run build
 
