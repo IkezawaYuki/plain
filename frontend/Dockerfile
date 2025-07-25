@@ -12,7 +12,7 @@ RUN npm ci
 COPY . .
 
 # Accept build-time environment variable
-ARG REACT_APP_API_URL
+ARG VITE_API_URL
 
 # Build the application
 RUN npm run build
