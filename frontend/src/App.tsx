@@ -44,7 +44,8 @@ const CheckoutForm: React.FC = () => {
     }
 
     try {
-      const res = await axios.post("http://localhost:8080/api/create-subscription", {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080'
+      const res = await axios.post(`${apiUrl}/api/create-subscription`, {
         plan: plan,
         payment_method: paymentMethod?.id,
         email: "user@example.com",
@@ -109,7 +110,8 @@ function App() {
     setLoading(true)
     setError('')
     try {
-      const response = await fetch('http://localhost:8080/api/hello')
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080'
+      const response = await fetch(`${apiUrl}/api/hello`)
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
