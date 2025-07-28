@@ -1,7 +1,103 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, type FormEvent } from 'react'
+import { loadStripe } from '@stripe/stripe-js'
+import { Elements } from '@stripe/react-stripe-js'
+import {
+  CardElement,
+  useStripe,
+  useElements
+} from "@stripe/react-stripe-js"
+import axios from "axios"
+import type {
+  StripeCardElement,
+  PaymentMethodResult,
+} from "@stripe/stripe-js"
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+
+const stripePromise = loadStripe('pk_test_your_publishable_key_here')
+
+const CheckoutForm: React.FC = () => {
+  const stripe = useStripe()
+  const elements = useElements()
+  const [plan, setPlan] = useState<"monthly" | "yearly">("monthly")
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+
+    if (!stripe || !elements) return
+
+    const cardElement = elements.getElement(CardElement)
+    if (!cardElement) return
+
+    const {
+      error,
+      paymentMethod
+    }: PaymentMethodResult = await stripe.createPaymentMethod({
+      type: "card",
+      card: cardElement as StripeCardElement,
+    })
+
+    if (error) {
+      alert(error.message)
+      return
+    }
+
+    try {
+      const res = await axios.post("http://localhost:8080/api/create-subscription", {
+        plan: plan,
+        payment_method: paymentMethod?.id,
+        email: "user@example.com",
+      })
+
+      const { client_secret, status } = res.data
+
+      if (status === "requires_confirmation") {
+        const confirmRes = await stripe.confirmCardPayment(client_secret)
+        if (confirmRes.error) {
+          alert(confirmRes.error.message)
+        } else {
+          alert("サブスク登録完了！")
+        }
+      }
+    } catch (err: any) {
+      alert("エラーが発生しました: " + err.message)
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label>
+          <input
+            type="radio"
+            value="monthly"
+            checked={plan === "monthly"}
+            onChange={() => setPlan("monthly")}
+          />
+          月払 ¥2,000
+        </label>
+        <label>
+          <input
+            type="radio"
+            value="yearly"
+            checked={plan === "yearly"}
+            onChange={() => setPlan("yearly")}
+          />
+          年払 ¥19,800（¥1,650/月相当）
+        </label>
+      </div>
+
+      <div style={{ margin: "1em 0" }}>
+        <CardElement />
+      </div>
+
+      <button type="submit" disabled={!stripe}>
+        プラスプランにアップグレードする
+      </button>
+    </form>
+  )
+}
 
 function App() {
   const [count, setCount] = useState(0)
@@ -13,8 +109,7 @@ function App() {
     setLoading(true)
     setError('')
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080'
-      const response = await fetch(`${apiUrl}/api/hello`)
+      const response = await fetch('http://localhost:8080/api/hello')
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
@@ -51,6 +146,13 @@ function App() {
         <button onClick={fetchHello} disabled={loading}>
           Refresh API Call
         </button>
+      </div>
+
+      <div className="card">
+        <h2>Stripe Payment Form:</h2>
+        <Elements stripe={stripePromise}>
+          <CheckoutForm />
+        </Elements>
       </div>
 
       <div className="card">
