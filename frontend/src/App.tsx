@@ -1,13 +1,13 @@
 import React, { useState, type FormEvent } from 'react'
 import { loadStripe } from '@stripe/stripe-js'
-import { Elements, useStripe, useElements, CardElement } from '@stripe/react-stripe-js'
+import { Elements, useStripe, useElements, CardNumberElement } from '@stripe/react-stripe-js'
 import axios from 'axios'
-import type { StripeCardElement, PaymentMethodResult } from '@stripe/stripe-js'
+import type { PaymentMethodResult } from '@stripe/stripe-js'
 
 // 型定義とカスタムフック
 import type { CompanyInfo, PlanType } from './types/checkout'
 import { useFormValidation } from './hooks/useFormValidation'
-import { STRIPE_PUBLISHABLE_KEY, PLANS } from './constants/checkout'
+import { STRIPE_PUBLISHABLE_KEY } from './constants/checkout'
 
 // コンポーネント
 import { ProductSection } from './components/ProductSection'
@@ -73,8 +73,8 @@ const CheckoutForm: React.FC = () => {
     }
 
     // カード要素の取得
-    const cardElement = elements.getElement(CardElement)
-    if (!cardElement) {
+    const cardNumberElement = elements.getElement(CardNumberElement)
+    if (!cardNumberElement) {
       setLoading(false)
       return
     }
@@ -84,7 +84,7 @@ const CheckoutForm: React.FC = () => {
       const { error: paymentError, paymentMethod }: PaymentMethodResult = 
         await stripe.createPaymentMethod({
           type: 'card',
-          card: cardElement as StripeCardElement,
+          card: cardNumberElement,
         })
 
       if (paymentError) {
@@ -119,8 +119,14 @@ const CheckoutForm: React.FC = () => {
       } else {
         setSuccess(true)
       }
-    } catch (err: any) {
-      setError(err.response?.data?.message || '決済処理中にエラーが発生しました')
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error && 'response' in err && 
+        typeof err.response === 'object' && err.response !== null &&
+        'data' in err.response && typeof err.response.data === 'object' && 
+        err.response.data !== null && 'message' in err.response.data
+        ? String(err.response.data.message)
+        : '決済処理中にエラーが発生しました'
+      setError(errorMessage)
     } finally {
       setLoading(false)
     }

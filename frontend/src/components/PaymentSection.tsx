@@ -1,5 +1,5 @@
 import React from 'react'
-import { CardElement } from '@stripe/react-stripe-js'
+import { CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js'
 import type { PlanType } from '../types/checkout'
 import { CARD_ELEMENT_OPTIONS, PLANS } from '../constants/checkout'
 
@@ -29,9 +29,30 @@ export const PaymentSection: React.FC<PaymentSectionProps> = ({
     <>
       {/* カード情報 */}
       <div className="card-section">
-        <label className="card-label">カード情報</label>
-        <div className="card-element-container">
-          <CardElement options={CARD_ELEMENT_OPTIONS} />
+        <label className="card-label">支払い方法</label>
+        
+        {/* カード番号 */}
+        <div className="card-field">
+          <label className="card-field-label">カード番号</label>
+          <div className="card-element-container">
+            <CardNumberElement options={CARD_ELEMENT_OPTIONS} />
+          </div>
+        </div>
+        
+        {/* 有効期限とCVC */}
+        <div className="card-row">
+          <div className="card-field">
+            <label className="card-field-label">有効期限</label>
+            <div className="card-element-container">
+              <CardExpiryElement options={CARD_ELEMENT_OPTIONS} />
+            </div>
+          </div>
+          <div className="card-field">
+            <label className="card-field-label">セキュリティコード</label>
+            <div className="card-element-container">
+              <CardCvcElement options={CARD_ELEMENT_OPTIONS} />
+            </div>
+          </div>
         </div>
       </div>
 

@@ -34,6 +34,7 @@ export const CARD_ELEMENT_OPTIONS = {
       iconColor: '#dc2626',
     },
   },
+  hidePostalCode: true,
 }
 
 export const POSTAL_CODE_API_ENDPOINT = 'https://zipcloud.ibsnet.co.jp/api/search'
