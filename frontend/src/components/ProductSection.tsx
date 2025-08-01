@@ -12,7 +12,7 @@ export const ProductSection: React.FC = () => {
             <h1 className="product-title">A-Root</h1>
           </div>
           <p className="product-subtitle">
-            あなたのビジネスを次のレベルへ。プラスプランで、より多くの機能と可能性を手に入れましょう。
+            コンテンツ管理の負担を軽減。A-Rootで効率的な情報発信を始めませんか。
           </p>
         </div>
 
