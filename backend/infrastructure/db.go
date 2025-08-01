@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"gorm.io/gorm"
-	plainErr "plain/domain"
+	"plain/domain/plainErr"
 	"plain/util"
 )
 

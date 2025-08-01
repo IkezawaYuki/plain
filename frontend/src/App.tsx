@@ -26,6 +26,21 @@ const CheckoutForm: React.FC = () => {
   // Stripe hooks
   const stripe = useStripe()
   const elements = useElements()
+
+  // ===== TEST API CALL - DELETE THIS SECTION =====
+  React.useEffect(() => {
+    const testApiCall = async () => {
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080'
+        const response = await axios.get(`${apiUrl}/api/hello`)
+        console.log('API Response:', response.data)
+      } catch (error) {
+        console.error('API Error:', error)
+      }
+    }
+    testApiCall()
+  }, [])
+  // ===== END TEST SECTION =====
   
   // State management
   const [selectedPlan, setSelectedPlan] = useState<PlanType>('monthly')

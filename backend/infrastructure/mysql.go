@@ -2,10 +2,11 @@ package infrastructure
 
 import (
 	"fmt"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 	"log"
 	"plain/config"
+
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 func GetMysqlConnection() *gorm.DB {

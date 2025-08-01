@@ -11,7 +11,7 @@ type Environment struct {
 	DBUser    string `envconfig:"DB_USER"`
 	DBPort    string `envconfig:"DB_PORT"`
 	DBPass    string `envconfig:"DB_PASSWORD"`
-	DBName    string `envconfig:"DB_SCHEME"`
+	DBName    string `envconfig:"DB_NAME"`
 	DBHost    string `envconfig:"DB_HOST"`
 }
 

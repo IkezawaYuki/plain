@@ -8,6 +8,8 @@ import (
 	"os"
 	"os/signal"
 	"plain/infrastructure"
+	"plain/interface/filter"
+	"plain/interface/repository"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -29,10 +31,18 @@ func main() {
 
 	conn := infrastructure.GetMysqlConnection()
 	db := infrastructure.NewDBDriver(conn)
-	fmt.Println(db)
+	userRepository := repository.NewUserRepository(db)
 
 	r.GET("/api/hello", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"message": "hello from Go"})
+		users, err := userRepository.Get(c.Request.Context(), &filter.UserFilter{})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+		user := users[0]
+		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Hello, %s!", user.Name)})
 	})
 
 	srv := &http.Server{
