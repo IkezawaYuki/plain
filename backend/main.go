@@ -2,12 +2,14 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
+	"plain/infrastructure"
 	"time"
 )
 
@@ -24,6 +26,10 @@ func main() {
 	})
 	r.Use(c)
 
+	conn := infrastructure.GetMysqlConnection()
+	db := infrastructure.NewDBDriver(conn)
+	fmt.Println(db)
+
 	r.GET("/api/hello", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"message": "hello from Go"})
 	})
@@ -36,7 +42,7 @@ func main() {
 	go func() {
 		err := srv.ListenAndServe()
 		if err != nil {
-			panic(err)
+			log.Fatal(err)
 		}
 	}()
 
