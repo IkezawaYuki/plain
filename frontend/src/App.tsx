@@ -20,6 +20,7 @@ import { SuccessPage } from './components/SuccessPage'
 import './App.css'
 import './Checkout.css'
 
+console.log(STRIPE_PUBLISHABLE_KEY)
 const stripePromise = loadStripe(STRIPE_PUBLISHABLE_KEY)
 
 const CheckoutForm: React.FC = () => {

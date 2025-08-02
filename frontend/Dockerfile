@@ -8,11 +8,16 @@ COPY package*.json ./
 # Install dependencies
 RUN npm ci
 
-# Copy source code
-COPY . .
-
 # Accept build-time environment variable
 ARG VITE_API_URL
+ARG VITE_STRIPE_PUBLISHABLE_KEY
+
+# Set environment variables for build
+ENV VITE_API_URL=$VITE_API_URL
+ENV VITE_STRIPE_PUBLISHABLE_KEY=$VITE_STRIPE_PUBLISHABLE_KEY
+
+# Copy source code (after setting ENV)
+COPY . .
 
 # Build the application
 RUN npm run build

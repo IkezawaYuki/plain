@@ -1,5 +1,6 @@
 .PHONY: init dev migrate-new migrate-up migrate-down migrate-status
 dev:
+	docker rm -f plain_backend
 	docker compose down
 	docker compose up --build -d
 	docker compose ps

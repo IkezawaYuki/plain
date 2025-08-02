@@ -62,6 +62,7 @@ services:
       dockerfile: Dockerfile
       args:
         - VITE_API_URL=${VITE_API_URL}
+        - VITE_STRIPE_PUBLISHABLE_KEY=${VITE_STRIPE_PUBLISHABLE_KEY}
     container_name: plain_frontend
     restart: unless-stopped
     ports:
