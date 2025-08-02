@@ -20,7 +20,6 @@ import { SuccessPage } from './components/SuccessPage'
 import './App.css'
 import './Checkout.css'
 
-console.log(STRIPE_PUBLISHABLE_KEY)
 const stripePromise = loadStripe(STRIPE_PUBLISHABLE_KEY)
 
 const CheckoutForm: React.FC = () => {
@@ -34,7 +33,7 @@ const CheckoutForm: React.FC = () => {
       try {
         const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080'
         const response = await axios.get(`${apiUrl}/api/hello`)
-        console.log('API Response:', response.data)
+        console.log('API Response:', response.data.message)
       } catch (error) {
         console.error('API Error:', error)
       }
